@@ -1,0 +1,121 @@
+// Copyright 2018-2020 Alexander Kromm (m8f/mmaulwurff)
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see http://www.gnu.org/licenses/
+//
+// This cvar loader is taken from laser sight mod by Alexander Kromm (m8f/mmaulwurff)
+
+class vmm_Settings
+{
+  double damageMultiplier()   			{ return damageMultiplierCvar.getDouble();   	}
+  double jumpMultiplier()   			{ return jumpMultiplierCvar.getDouble();   		}
+  double speedMultiplier()   			{ return speedMultiplierCvar.getDouble();   	}
+  double dashMultiplier()   			{ return dashMultiplierCvar.getDouble();   		}
+  double dashCooldown()   				{ return dashCooldownCvar.getDouble();   		}
+  bool doubleDashEnabled()   			{ return doubleDashCvar.getBool();   			}
+  bool doubleJumpEnabled()   			{ return doubleJumpCvar.getBool();   			}
+  bool ledgeClimbEnabled()   			{ return ledgeClimbCvar.getBool();   			}
+  bool helthRegenEnabled()   			{ return helthRegenCvar.getBool();   			}
+  bool criticalHealthRegenEnabled()   	{ return criticalHealthRegenCvar.getBool();   	}
+  double healthRegenTime()   			{ return healthRegenTimeCvar.getDouble();   	}
+  bool vrMeleeEnabled()   				{ return vrMeleeCvar.getBool();   				}
+  double vrMeleeRange()   				{ return vrMeleeRangeCvar.getDouble();   		}
+  int vrMeleeMult()   					{ return vrMeleeMultCvar.getInt();   			}
+  double ghookCooldown()   				{ return ghookCooldownCvar.getDouble();   		}
+
+  static
+  vmm_Settings of()
+  {
+    let result = new("vmm_Settings");
+
+    result.damageMultiplierCvar   		= vmm_Cvar.of("vmm_damage_mult");
+    result.jumpMultiplierCvar   		= vmm_Cvar.of("vmm_jump_mult");
+    result.speedMultiplierCvar   		= vmm_Cvar.of("vmm_speed_mult");
+    result.dashMultiplierCvar   		= vmm_Cvar.of("vmm_dash_mult");
+    result.dashCooldownCvar   			= vmm_Cvar.of("vmm_dash_cooldown");
+    result.doubleDashCvar   			= vmm_Cvar.of("vmm_double_dash");
+    result.doubleJumpCvar   			= vmm_Cvar.of("vmm_double_jump");
+    result.ledgeClimbCvar   			= vmm_Cvar.of("vmm_ledge_climb");
+    result.helthRegenCvar   			= vmm_Cvar.of("vmm_health_regen");
+    result.criticalHealthRegenCvar   	= vmm_Cvar.of("vmm_critical_heal");
+    result.healthRegenTimeCvar   		= vmm_Cvar.of("vmm_regen_time");
+    result.vrMeleeCvar   				= vmm_Cvar.of("vmm_melee");
+    result.vrMeleeRangeCvar   			= vmm_Cvar.of("vmm_melee_range");
+    result.vrMeleeMultCvar   			= vmm_Cvar.of("vmm_melee_mult");
+    result.ghookCooldownCvar   			= vmm_Cvar.of("vmm_hook_cooldown");
+
+    return result;
+  }
+
+  private vmm_Cvar damageMultiplierCvar;
+  private vmm_Cvar jumpMultiplierCvar;
+  private vmm_Cvar speedMultiplierCvar;
+  private vmm_Cvar dashMultiplierCvar;
+  private vmm_Cvar dashCooldownCvar;
+  private vmm_Cvar doubleDashCvar;
+  private vmm_Cvar doubleJumpCvar;
+  private vmm_Cvar ledgeClimbCvar;
+  private vmm_Cvar helthRegenCvar;
+  private vmm_Cvar criticalHealthRegenCvar;
+  private vmm_Cvar healthRegenTimeCvar;
+  private vmm_Cvar vrMeleeCvar;
+  private vmm_Cvar vrMeleeRangeCvar;
+  private vmm_Cvar vrMeleeMultCvar;
+  private vmm_Cvar ghookCooldownCvar;
+
+} // class vmm_Settings
+
+/**
+ * This class provides access to a user or server Cvar.
+ *
+ * Accessing Cvars through this class is faster because calling Cvar.GetCvar()
+ * is costly. This class caches the result of Cvar.GetCvar() and handles
+ * loading a savegame.
+ */
+class vmm_Cvar
+{
+
+// public: /////////////////////////////////////////////////////////////////////
+
+  static
+  vmm_Cvar of(String name)
+  {
+    let result = new("vmm_Cvar");
+    result._name = name;
+    return result;
+  }
+
+  bool   isDefined() { load(); return (_cvar != NULL);   }
+
+  String getString() { load(); return _cvar.GetString(); }
+  bool   getBool()   { load(); return _cvar.GetInt();    }
+  int    getInt()    { load(); return _cvar.GetInt();    }
+  double getDouble() { load(); return _cvar.GetFloat();  }
+
+// private: ////////////////////////////////////////////////////////////////////
+
+  private
+  void load()
+  {
+    if (_cvar == NULL)
+    {
+      PlayerInfo player = players[consolePlayer];
+
+      _cvar = Cvar.GetCvar(_name, player);
+    }
+  }
+
+  private String         _name;
+  private transient Cvar _cvar;
+
+} // class vmm_Cvar

@@ -1,0 +1,15 @@
+Credits
+=========
+
+* CVar loader zscript written by Alexander Kromm (m8f/mmaulwurff)
+* Player Damage/Speed/Jump modifier and auto-heal zscript from Custom Doom and Ultimate Custom Doom mods
+* Dash move zscript written by Apeirogon
+* Ledge grab zscript written by dodopod
+* Grappling/Meat-Hook zscript written by Agent_Ash aka Jekyll Grim Payne
+* Double Jump, Teleport move and VR melee zscripts written by Ermac
+* All the scripts combined and modified by Ermac
+
+Resource credits:
+=================
+Grapple 3D Model - https://sketchfab.com/3d-models/grapple-f8a9ed3ff2f44fe18bc62d431255f71a
+All 3D models and model textures edited and modified by Ermac

@@ -1,0 +1,7 @@
+addkeysection "Other Keybindings [Hyper-V]" [Hyper-V]
+
+addmenukey "Dash Move" "netevent \"vmm_dash\""
+addmenukey "Teleport Move" tpmv
+addmenukey "Throw Hook" "netevent \"vmm_throwhook\""
+
+alias tpmv "netevent \"vmm_teleport\""

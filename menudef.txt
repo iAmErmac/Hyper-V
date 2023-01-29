@@ -1,0 +1,60 @@
+AddOptionMenu "OptionsMenu"
+{
+	Submenu "Hyper-V Options", "VMM_Settings"
+}
+
+OptionMenu "VMM_Settings" {
+	Title "Hyper-V Options"
+	StaticText " "
+	
+	Slider "Weapon Damage Multiplier", 				"vmm_damage_mult", "0.5", "10.0", "0.5"
+	Slider "Jump Strength", 						"vmm_jump_mult", "1.0", "5.0", "0.5"
+	Slider "Sprint Speed", 							"vmm_speed_mult", "0.5", "3.0", "0.5"
+	StaticText " "
+	StaticText "VR Melee", "Gold"
+	Option "Enable VR Melee", 						"vmm_melee", "OnOff"
+	StaticText "With VR Melee turned on you can swing any weapon to perform basic melee hits", "DarkGrey"
+	Slider "Melee Attack Range", 					"vmm_melee_range", 0, 3, 1, 0, vmm_melee
+	Option "Melee Attack Multiplier", 				"vmm_melee_mult", "VRMeleeDamage", vmm_melee
+	StaticText " "
+	StaticText "Health Regenration", "Gold"
+	Option "Auto Regenrate Health", 				"vmm_health_regen", "OnOff"
+	StaticText " "
+	Option "Critical Health Regeneration Only", 	"vmm_critical_heal", "OnOff", vmm_health_regen
+	StaticText "With this option enabled health will be regenrated up to 30 points only", "DarkGrey"
+	StaticText " "
+	Slider "Regenration Interval (In Sec)", 		"vmm_regen_time", "0.5", "10.0", "0.5", "1"
+	StaticText " "
+	StaticText "Forward Dash", "Gold"
+	Control "Dash Move", 							"netevent \"vmm_dash\""
+	Option "Double Dash", 							"vmm_double_dash", "OnOff"
+	Slider "Dash Distance", 						"vmm_dash_mult", "0.5", "3.0", "0.5"
+	Slider "Dash Cooldown (In Sec)", 					"vmm_dash_cooldown", "0", "5.0", "0.5"
+	StaticText " "
+	StaticText "Double Jumping", "Gold"
+	StaticText "Jump higher when pressing jump button twice", "DarkGrey"
+	Option "Double Jump", 							"vmm_double_jump", "OnOff"
+	StaticText " "
+	StaticText "Ledge Climbing", "Gold"
+	StaticText "Hold jump near a ledge to start climbing", "DarkGrey"
+	Option "Ledge Climb", 							"vmm_ledge_climb", "OnOff"
+	StaticText " "
+	StaticText "Teleporting", "Gold"
+	Control "Teleport Move", 						"tpmv"
+	StaticText "Press once to activate teleporter beam. Press again to teleport", "DarkGrey"
+	StaticText "Press Jump key to deactivate teleporter beam", "DarkGrey"
+	StaticText " "
+	StaticText "Grappling & Meat Hook", "Gold"
+	Control "Throw Hook", 							"netevent \"vmm_throwhook\""
+	StaticText "Hit a wall or ceiling to use as Grappling Hook", "DarkGrey"
+	StaticText "Hit a monster to use as Meat Hook", "DarkGrey"
+	Slider "Hook Cooldown (In Sec)", 				"vmm_hook_cooldown", "0", "5.0", "0.5"
+}
+
+OptionValue VRMeleeDamage {
+
+    1, "x1 Punch Damage"
+    2, "x2 Punch Damage"
+    3, "x3 Punch Damage"
+
+}

@@ -1,0 +1,5 @@
+version "3.0"
+
+#include "zscript/vmm_settings.txt"
+#include "zscript/vmm_attributes.txt"
+#include "zscript/v_moves.txt"

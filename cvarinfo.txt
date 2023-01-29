@@ -1,0 +1,15 @@
+user float 	vmm_damage_mult 	= 1.0;
+user float 	vmm_jump_mult 		= 1.0;
+user float 	vmm_speed_mult 		= 1.0;
+user float 	vmm_dash_mult 		= 0.5;
+user float 	vmm_dash_cooldown 	= 1.0;
+user bool 	vmm_double_dash 	= false;
+user bool 	vmm_double_jump 	= false;
+user bool 	vmm_ledge_climb 	= false;
+user bool 	vmm_health_regen 	= false;
+user bool 	vmm_critical_heal 	= true;
+user float 	vmm_regen_time 		= 5.0;
+user bool	vmm_melee			= true;
+user float	vmm_melee_range		= 0;
+user int	vmm_melee_mult		= 1;
+user float 	vmm_hook_cooldown 	= 1.0;

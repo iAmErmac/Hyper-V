@@ -1,0 +1,6 @@
+//Sounds taken from ZMovement mod
+
+HookWall	"sounds/HookWall.ogg"
+HookMeat	"sounds/HookMeat.ogg"
+HookFailed	"sounds/HookFailed.ogg"
+HookLaunch	"sounds/HookLaunch.ogg"

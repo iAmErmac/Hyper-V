@@ -1,6 +1,6 @@
 # Hyper-V mod for Doom
 
-Let my friend ChatGPT introduces this little mod:
+Let my friend ChatGPT introduce this little mod:
 
 Hyper-V is a Doom mod that adds a range of high-speed movement options, including dash, double jumps, teleportation, and grappling hooks. Players can use these mechanics to traverse levels quickly and efficiently, while still having the ability to punch their way through hordes of monsters with speed and agility
 
@@ -13,21 +13,21 @@ To download the Hyper-V mod click the download button below:
 ## Features
 * Double Jumps
 * Foward Dash Move and Double-Dashes
-* Ledge Climbing (hold jump at any ledge to climb)
-* Teleport Move (Hold teleport button to select a spot to teleport)
-* Grappling Hook and Meat Hook (Use grapple hook on monsters to pull them in, ie. use as Meat Hook)
-* Positional Melee Attack (swing your hands at monsters to perform melee attacks)
+* Ledge Climbing (hold jump key at any ledge to climb up)
+* Teleport Move (Hold teleport button to select a spot for portal)
+* Grappling Hook and Meat Hook (Use grappling hook on monsters to pull them in, ie. use as Meat Hook)
+* Positional Melee Attack (Swing your hands at monsters to perform melee attacks)
 * Increase/decrease player Sprint, Jump and Damage stats as you need
-* Optional Auto Heal
+* Optional Auto Heals
 * Can be used in regular, VR or dual-wield VR builds of gzdoom/lzdoom/questzdoom
 
 ## Known Issues
-* Player may get stuck at some places when using the Grappling Hook. Wait for 5 sec to get released
-* Teleporting outside boundaries is possible sometimes and player may not be able to teleport back into the play area. In that case use the Grappling Hook to try to return back
+* Player may get stuck at some places when using the Grappling Hook. Wait for 5 sec to be released
+* Teleporting outside boundaries is possible and player may not be able to teleport back into the play area sometimes. In those cases use the Grappling Hook to try to return back or restart the level
 
 ## Installation
 
-Since it's an universal mod it can be used with any mod and does not require any special load order.
+Since it's an universal mod it can be used with any other mods and does not require any special load order.
 
 ### GZDoom VR (PC-VR)
 

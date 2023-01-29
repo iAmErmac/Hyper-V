@@ -1,0 +1,170 @@
+
+/*
+*
+* Script credits to Custom Doom and Ultimate Custom Doom mods
+* https://forum.zdoom.org/viewtopic.php?f=43&t=51446
+* https://github.com/mmaulwurff/ultimate-custom-doom
+*
+* Everything is modified and extended by Ermac
+* https://github.com/iAmErmac
+*
+*
+* You may use this in your project. Just leave this comment
+* at the top of this script and give credit please
+*
+*/
+
+class CustomPlayerProperties play
+{
+
+// public: /////////////////////////////////////////////////////////////////////////////////////////
+
+	CustomPlayerProperties init(PlayerInfo player)
+	{
+		_jumpZ = player.mo.jumpZ;
+		return self;
+	}
+
+	void update(PlayerInfo player)
+	{
+		PlayerPawn           pawn    = player.mo;
+		class<PlayerPawn>    type    = pawn.GetClassName();
+		readonly<PlayerPawn> default = GetDefaultByType(type);
+		_settings = vmm_Settings.of();
+
+		updateDamageMultiply(pawn, _settings, default);
+		updateSpeed         (pawn, _settings, default);
+		updateJumpZ         (pawn, _settings, default);
+	}
+
+// private: ////////////////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////
+	// Player Damage Modifier			//
+	//////////////////////////////////////
+
+	private static void updateDamageMultiply(PlayerPawn pawn, vmm_Settings loadCVar, readonly<PlayerPawn> default)
+	{
+		double originalDamageMultiplier = default.DamageMultiply;
+		double _damage_mult = loadCVar.damageMultiplier();
+		pawn.DamageMultiply = _damage_mult ? originalDamageMultiplier * _damage_mult : originalDamageMultiplier;
+	}
+	
+	//////////////////////////////////////
+	// Player Speed Modifier			//
+	//////////////////////////////////////
+
+	private static void updateSpeed(PlayerPawn pawn, vmm_Settings loadCVar, readonly<PlayerPawn> default)
+	{
+		double originalSpeed = default.Speed;
+		double _speed_mult = loadCVar.speedMultiplier();
+		pawn.Speed = _speed_mult ? originalSpeed * _speed_mult : originalSpeed;
+	}
+	
+	//////////////////////////////////////
+	// Player Jump Modifier				//
+	//////////////////////////////////////
+
+	private void updateJumpZ(PlayerPawn pawn, vmm_Settings loadCVar, readonly<PlayerPawn> default)
+	{
+		double originalJumpZ = default.JumpZ;
+		double _jump_mult = loadCVar.jumpMultiplier();
+
+		if (pawn.JumpZ != _jumpZ) // something changed the jump height
+		{
+			originalJumpZ = pawn.JumpZ;
+		}
+
+		pawn.JumpZ = _jump_mult ? originalJumpZ * _jump_mult : originalJumpZ;
+		_jumpZ = pawn.JumpZ;
+	}
+
+	private double _jumpZ;
+	private vmm_Settings _settings;
+}
+
+class VPlayerPropModifier : EventHandler
+{
+	override void OnRegister()
+	{
+		_isInitialized = false;
+	}
+
+	override void WorldLoaded(WorldEvent event)
+	{
+		_isTitlemap = CheckTitlemap();
+	}
+	
+	override void WorldTick()
+	{
+		PlayerInfo player = players[consolePlayer];
+		if (player == null) { return; }
+		
+		if (_isTitlemap) { return; }
+
+		if (!_isInitialized) { initEvent(player); }
+
+		updateProperties(player);
+		
+		if(healticks > 0){
+			healticks--;
+		}
+		else{
+			healticks = _settings.healthRegenTime() * 35;
+			healUp(player);
+		}
+	}
+	
+	private void initEvent(PlayerInfo player)
+	{
+		_settings = vmm_Settings.of();
+		healticks = _settings.healthRegenTime() * 35;
+		init(player);
+		_isInitialized = true;
+	}
+	
+	private void init(PlayerInfo player)
+	{
+		_playerProperties = new("CustomPlayerProperties").init(player);
+		updateProperties(player);
+	}
+	
+	private void updateProperties(PlayerInfo player)
+	{
+		_settings = vmm_Settings.of();
+		_playerProperties.update(player);
+	}
+
+	private static bool CheckTitlemap()
+	{
+		bool isTitlemap = (level.mapname == "TITLEMAP");
+		return isTitlemap;
+	}
+	
+	//////////////////////////////////////
+	// Auto Heal						//
+	//////////////////////////////////////
+	
+	private void healUp(PlayerInfo player)
+	{
+		if (!player || player.Health <= 0 || !_settings.helthRegenEnabled()) return;
+
+		int health    = player.mo.Health;
+		int maxHealth = player.mo.MaxHealth ? player.mo.MaxHealth : 100;
+		int maxRegen = _settings.criticalHealthRegenEnabled() ? 30 : maxHealth;
+		
+		if(health >= maxRegen){
+			return;
+		}
+		else{
+			player.mo.A_SetHealth(health + 1);
+		}
+	}
+	
+	private bool _isInitialized;
+	private bool _isTitlemap;
+	private vmm_Settings _settings;
+	
+	private CustomPlayerProperties 	_playerProperties;
+	private int healticks;
+}

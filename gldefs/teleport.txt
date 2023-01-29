@@ -1,0 +1,11 @@
+PointLight TeleFloorIlluminate
+{
+	Color 0.0 1.0 1.0
+	Size 15
+	Offset 0 0 0
+}
+
+Object PortalIndicatorLight
+{
+	Frame TNT1A { Light TeleFloorIlluminate }
+}
