@@ -16,3 +16,12 @@ $random vrfist/strong { vrfist/strong1 vrfist/strong2 vrfist/strong3 }
 vrfist/strong1	FISTSTR1
 vrfist/strong2	FISTSTR2
 vrfist/strong3	FISTSTR3
+
+$random vrfist/rip { vrfist/rip1 vrfist/rip2 }
+vrfist/rip1	DSRIP1
+vrfist/rip2	DSRIP2
+
+$random vrfist/beat { hbeat1 hbeat2 hbeat3 }
+hbeat1	hbeat1
+hbeat2	hbeat2
+hbeat3	hbeat3

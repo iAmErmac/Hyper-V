@@ -26,10 +26,12 @@ To download the Hyper-V mod click the download button below:
 ## Known Issues
 * Player may get stuck at some places when using the Grappling Hook. Wait for 5 sec to be released
 * Teleporting outside boundaries is possible and player may not be able to teleport back into the play area sometimes. In those cases use the Grappling Hook to try to return back or restart the level
+* In restricted mode Teleport does not work on slopes and stairs. In unrestricted Teleport mode player may often land inside walls or ourside play areas
+* Melee combo stun shake does not work in QuestZDoom by default. To enable screen shake increase earthquake shake intensity from Dislay Options
 
 ## Installation
 
-Since it's an universal mod it can be used with any other mods and does not require any special load order.
+Since it's an universal mod it can be used with any other mods and does not require any special load order. Although recommended to load after all the other mods to avoid any conflict
 
 ### GZDoom VR (PC-VR)
 
@@ -58,6 +60,26 @@ To install:
 
     Copy this mod into /sdcard/QuestZDoom/mods/
     Load QuestZDoom Launcher. select this mod along with others mods
+
+## Recommended mods to combine with:
+
+* [Universal Doom Weapons for VR:](https://github.com/iAmErmac/Universal_Doom_3DWeapons_VR)
+  - This mod lets you use Doom Weapons (3d) with almost any mod
+
+* [Universal Doom Voxel Weapons for VR:](https://github.com/iAmErmac/Universal_Doom_VoxelWeapons_VR)
+  - This mod lets you use Doom Weapons (Voxel) with almost any mod
+  
+* [DamNums:](https://forum.zdoom.org/viewtopic.php?t=55048)
+  - DamNums is a pretty simple concept: shoot monsters and little numbers pop out that tell you how much damage you did
+  
+* [Top HP Bars:](https://forum.zdoom.org/viewtopic.php?t=55048)
+  - Really simple mod to add HP bars on top of enemies and players. Performance version is recommended for VR
+  
+* [Bolognese Universal Gore:](https://www.moddb.com/mods/brutal-doom/downloads/bolognese-gore-mod-v20)
+  - A mod-friendly universal gore mod for Doom, Doom 2, Final Doom, Heretic, Hexen, Strife, Hacx, FreeDoom, Chex Quest and anything else you can run on Zandronum/GZDoom
+  
+* [Nash Gore:](https://forum.zdoom.org/viewtopic.php?t=62641)
+  - The father of gore mods. The original brutal modification for (G)ZDoom returns, with a Vengeance
 
 ## Credits
 

@@ -53,6 +53,8 @@ OptionMenu "VMM_Settings" {
 	Control "Teleport Move", 						"tpmv"
 	StaticText "Hold to activate teleporter beam and release to teleport", "DarkGrey"
 	Option "Activate using", 						"vmm_teleport_hand", "ActivatorHand"
+	Option "Restricted Mode", 						"vmm_tp_restrict", "OnOff"
+	StaticText "In restricted mode you can't use teleport on slopes and stairs", "DarkGrey"
 	StaticText " "
 	StaticText "Grappling & Meat Hook", "Gold"
 	Control "Throw Hook", 							"netevent \"vmm_throwhook\""

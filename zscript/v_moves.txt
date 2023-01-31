@@ -79,6 +79,7 @@ class VMovesHandler : EventHandler
 		V_Moves(hyperv).hook_coldown		= _settings.ghookCooldown();
 		V_Moves(hyperv).hookHand			= _settings.hookHand();
 		V_Moves(hyperv).teleportHand		= _settings.teleportHand();
+		V_Moves(hyperv).teleport_restricted	= _settings.teleportRestricted();
 	}
 	
 	override void OnRegister()
@@ -92,26 +93,21 @@ class VMovesHandler : EventHandler
         let plr = players[e.Player].mo;
 		if(!plr) return;
 		
+		if(!hyperv) return;
+		
 		//Detect Dash key press
         if (e.Name == "vmm_dash")
         {
+			V_Moves(hyperv).forward_thrust = true;
+			countdown_for_dash_stop = 1; //disable dash flag shortly, otherwise player will keep dashing infinitely
+			
+			if(V_Moves(hyperv).dash_buttons_press < max_dash_num)
 			{
-				if(!hyperv) return;
-
-				if(hyperv)
-				{
-					V_Moves(hyperv).forward_thrust = true;
-					countdown_for_dash_stop = 1; //disable dash flag shortly, otherwise player will keep dashing infinitely
-					
-					if(V_Moves(hyperv).dash_buttons_press < max_dash_num)
-					{
-						V_Moves(hyperv).dash_buttons_press++;
-					}
-					else
-					{
-						V_Moves(hyperv).dash_buttons_press = max_dash_num;
-					}
-				}
+				V_Moves(hyperv).dash_buttons_press++;
+			}
+			else
+			{
+				V_Moves(hyperv).dash_buttons_press = max_dash_num;
 			}
         }
 		
@@ -507,21 +503,21 @@ class V_Moves : CustomInventory
 				m_damage = CheckMeleeCombo(t.linetarget) ? m_damage * frandom(1.5, 3.0) : m_damage;
 				owner.LineAttack(b_angle, attack_range, pitch, m_damage, "Melee", "BulletPuff", LAF_NORANDOMPUFFZ);
 				melee_delay = melee_cooldown;
-				A_PlaySound("vrfist/punch", CHAN_AUTO);
+				t.linetarget.A_PlaySound("vrfist/punch", 6);
 			}
 			else if(t2.linetarget)
 			{
 				m_damage = CheckMeleeCombo(t2.linetarget) ? m_damage * frandom(1.5, 3.0) : m_damage;
 				owner.LineAttack(b_angle - 30.0, attack_range, pitch, m_damage, "Melee", "BulletPuff", LAF_NORANDOMPUFFZ);
 				melee_delay = melee_cooldown;
-				A_PlaySound("vrfist/punch", CHAN_AUTO);
+				t2.linetarget.A_PlaySound("vrfist/punch", 6);
 			}
 			else if(t3.linetarget)
 			{
 				m_damage = CheckMeleeCombo(t3.linetarget) ? m_damage * frandom(1.5, 3.0) : m_damage;
 				owner.LineAttack(b_angle + 30.0, attack_range, pitch, m_damage, "Melee", "BulletPuff", LAF_NORANDOMPUFFZ);
 				melee_delay = melee_cooldown;
-				A_PlaySound("vrfist/punch", CHAN_AUTO);
+				t3.linetarget.A_PlaySound("vrfist/punch", 6);
 			}
 		}
 		else if(melee_delay > 0)
@@ -541,21 +537,21 @@ class V_Moves : CustomInventory
 				m_damage = CheckMeleeCombo(t4.linetarget) ? m_damage * frandom(1.5, 3.0) : m_damage;
 				owner.LineAttack(b_angle, attack_range, pitch, m_damage, "Melee", "BulletPuff", LAF_NORANDOMPUFFZ | LAF_ISOFFHAND);
 				offhand_melee_delay = melee_cooldown;
-				A_PlaySound("vrfist/punch", CHAN_AUTO);
+				t4.linetarget.A_PlaySound("vrfist/punch", 6);
 			}
 			else if(t5.linetarget)
 			{
 				m_damage = CheckMeleeCombo(t5.linetarget) ? m_damage * frandom(1.5, 3.0) : m_damage;
 				owner.LineAttack(b_angle - 30.0, attack_range, pitch, m_damage, "Melee", "BulletPuff", LAF_NORANDOMPUFFZ | LAF_ISOFFHAND);
 				offhand_melee_delay = melee_cooldown;
-				A_PlaySound("vrfist/punch", CHAN_AUTO);
+				t5.linetarget.A_PlaySound("vrfist/punch", 6);
 			}
 			else if(t6.linetarget)
 			{
 				m_damage = CheckMeleeCombo(t6.linetarget) ? m_damage * frandom(1.5, 3.0) : m_damage;
 				owner.LineAttack(b_angle + 30.0, attack_range, pitch, m_damage, "Melee", "BulletPuff", LAF_NORANDOMPUFFZ | LAF_ISOFFHAND);
 				offhand_melee_delay = melee_cooldown;
-				A_PlaySound("vrfist/punch", CHAN_AUTO);
+				t6.linetarget.A_PlaySound("vrfist/punch", 6);
 			}
 		}
 		else if(offhand_melee_delay > 0)
@@ -585,12 +581,15 @@ class V_Moves : CustomInventory
 			if(random(1, 10) <= vr_melee_combocrit)
 			{
 				is_critical_hit = true;
-				A_PlaySound("vrfist/strong", CHAN_AUTO);
+				target.A_PlaySound("vrfist/strong", CHAN_BODY);
 				
 				//If has a chance to stun
 				if(random(1, 10) <= vr_meleecombostun)
 				{
 					target.GiveInventory("vrMeleeComboStunner", 1);
+					target.A_Quake(random(1,2), 22, 0, 64, "");
+					target.A_PlaySound("vrfist/rip", 6);
+					target.A_PlaySound("vrfist/beat", 7);
 				}
 			}
 		}
@@ -641,6 +640,7 @@ class V_Moves : CustomInventory
 	int hookHand;
 	
 	//Teleport Move
+	bool teleport_restricted; //set by cvar
 	bool ActivateTeleporBeam;
 	Actor PortalCircle;
 	Vector3 PortalPos;
@@ -877,20 +877,24 @@ class Telebeam_Dummy : Actor
 			// checking if there is a hit on the floor
 			// if any if these checks fail, destroy the actor by moving
 			// to the "Null" state sequence:
-			if (GetZAt(24,0) != floorz || GetZAt(-24,0) != floorz || GetZAt(0,24) != floorz || GetZAt(0,-24) != floorz)
+			if(invoker.master && V_Moves(invoker.master).teleport_restricted && (GetZAt(24,0) != floorz || GetZAt(-24,0) != floorz || GetZAt(0,24) != floorz || GetZAt(0,-24) != floorz))
 			{
 				if(V_Moves(invoker.master)) V_Moves(invoker.master).PortalPos = (0, 0, 0);
 				return ResolveState("Null");
 			}
 			
 			Actor plr;
-			if(V_Moves(invoker.master)) plr = V_Moves(invoker.master).owner;
-			if(plr && !plr.CheckSight(invoker, SF_IGNOREVISIBILITY | SF_IGNOREWATERBOUNDARY))
+			if(invoker.master)
 			{
-				if(V_Moves(invoker.master)) V_Moves(invoker.master).PortalPos = (0, 0, 0);
-				return ResolveState("Null");
+				plr = V_Moves(invoker.master).owner;
+				if(V_Moves(invoker.master).teleport_restricted && plr && !plr.CheckSight(invoker, SF_IGNOREVISIBILITY | SF_IGNOREWATERBOUNDARY))
+				{
+					if(V_Moves(invoker.master)) V_Moves(invoker.master).PortalPos = (0, 0, 0);
+					return ResolveState("Null");
+				}
 			}
 			
+			if(invoker.master) V_Moves(invoker.master).PortalPos = (0, 0, 0);
 			return ResolveState(null);
 		}
 		TNT1 A 0 A_CheckCeiling("Crash");
@@ -908,8 +912,10 @@ class Telebeam_Dummy : Actor
 	
 	action void A_MakePortalCircle()
 	{
-		if(V_Moves(invoker.master) && V_Moves(invoker.master).PortalCircle && V_Moves(invoker.master).owner.CheckMove(self.pos.xy))
+		if(invoker.master && V_Moves(invoker.master).PortalCircle)
 		{
+			if(V_Moves(invoker.master).teleport_restricted && !V_Moves(invoker.master).owner.CheckMove(self.pos.xy)) return;
+			
 			V_Moves(invoker.master).PortalPos = self.pos;
 			V_Moves(invoker.master).PortalCircle.SetOrigin(self.pos, true);
 			V_Moves(invoker.master).PortalCircle.bInvisible = false;

@@ -42,6 +42,7 @@ class vmm_Settings
   int teleportHand()   					{ return teleportHandCvar.getInt();   			}
   bool offhandFistEnabled()   			{ return offhandFistCvar.getBool();   			}
   int offhandFistModel()   				{ return offhandFistModelCvar.getInt();   		}
+  bool teleportRestricted()   			{ return teleportRestrictCvar.getBool();   		}
 
   static
   vmm_Settings of()
@@ -73,6 +74,7 @@ class vmm_Settings
     result.teleportHandCvar   			= vmm_Cvar.of("vmm_teleport_hand");
     result.offhandFistCvar   			= vmm_Cvar.of("vmm_offhand_fist");
     result.offhandFistModelCvar   		= vmm_Cvar.of("vmm_offhand_model");
+    result.teleportRestrictCvar   		= vmm_Cvar.of("vmm_tp_restrict");
 
     return result;
   }
@@ -102,6 +104,7 @@ class vmm_Settings
   private vmm_Cvar teleportHandCvar;
   private vmm_Cvar offhandFistCvar;
   private vmm_Cvar offhandFistModelCvar;
+  private vmm_Cvar teleportRestrictCvar;
 
 } // class vmm_Settings
 

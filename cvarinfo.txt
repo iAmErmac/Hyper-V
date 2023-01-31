@@ -20,6 +20,7 @@ user float	vmm_melee_kb_mass	= 600;
 user int	vmm_melee_stun		= 4;
 user float 	vmm_hook_cooldown 	= 1.0;
 user int 	vmm_hook_hand 		= 0;
+user bool 	vmm_tp_restrict 	= true;
 user int 	vmm_teleport_hand 	= 0;
 user bool 	vmm_offhand_fist 	= false;
 user int 	vmm_offhand_model 	= 0;
