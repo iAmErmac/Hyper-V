@@ -90,6 +90,7 @@ class VMovesHandler : EventHandler
     {
         let plr = players[e.Player].mo;
 		if(!plr) return;
+		
 		if(!hyperv) return;
 		
 		//Detect Dash key press
@@ -494,21 +495,21 @@ class V_Moves : CustomInventory
 				m_damage = CheckMeleeCombo(t.linetarget) ? m_damage * frandom(1.5, 3.0) : m_damage;
 				owner.LineAttack(b_angle, attack_range, pitch, m_damage, "Melee", "BulletPuff", LAF_NORANDOMPUFFZ);
 				melee_delay = melee_cooldown;
-				t.linetarget.A_PlaySound("vrfist/punch", CHAN_BODY);
+				t.linetarget.A_PlaySound("vrfist/punch", 6);
 			}
 			else if(t2.linetarget)
 			{
 				m_damage = CheckMeleeCombo(t2.linetarget) ? m_damage * frandom(1.5, 3.0) : m_damage;
 				owner.LineAttack(b_angle - 30.0, attack_range, pitch, m_damage, "Melee", "BulletPuff", LAF_NORANDOMPUFFZ);
 				melee_delay = melee_cooldown;
-				t2.linetarget.A_PlaySound("vrfist/punch", CHAN_BODY);
+				t2.linetarget.A_PlaySound("vrfist/punch", 6);
 			}
 			else if(t3.linetarget)
 			{
 				m_damage = CheckMeleeCombo(t3.linetarget) ? m_damage * frandom(1.5, 3.0) : m_damage;
 				owner.LineAttack(b_angle + 30.0, attack_range, pitch, m_damage, "Melee", "BulletPuff", LAF_NORANDOMPUFFZ);
 				melee_delay = melee_cooldown;
-				t3.linetarget.A_PlaySound("vrfist/punch", CHAN_BODY);
+				t3.linetarget.A_PlaySound("vrfist/punch", 6);
 			}
 		}
 		else if(melee_delay > 0)
@@ -538,7 +539,7 @@ class V_Moves : CustomInventory
 			if(random(1, 10) <= vr_melee_combocrit)
 			{
 				is_critical_hit = true;
-				target.A_PlaySound("vrfist/strong", CHAN_BODY);
+				target.A_PlaySound("vrfist/strong", 6);
 				
 				//If has a chance to stun
 				if(random(1, 10) <= vr_meleecombostun)
@@ -832,20 +833,24 @@ class Telebeam_Dummy : Actor
 			// checking if there is a hit on the floor
 			// if any if these checks fail, destroy the actor by moving
 			// to the "Null" state sequence:
-			if(V_Moves(invoker.master).teleport_restricted && (GetZAt(24,0) != floorz || GetZAt(-24,0) != floorz || GetZAt(0,24) != floorz || GetZAt(0,-24) != floorz))
+			if(invoker.master && V_Moves(invoker.master).teleport_restricted && (GetZAt(24,0) != floorz || GetZAt(-24,0) != floorz || GetZAt(0,24) != floorz || GetZAt(0,-24) != floorz))
 			{
 				if(V_Moves(invoker.master)) V_Moves(invoker.master).PortalPos = (0, 0, 0);
 				return ResolveState("Null");
 			}
 			
 			Actor plr;
-			if(V_Moves(invoker.master)) plr = V_Moves(invoker.master).owner;
-			if(V_Moves(invoker.master).teleport_restricted && plr && !plr.CheckSight(invoker, SF_IGNOREVISIBILITY | SF_IGNOREWATERBOUNDARY))
+			if(invoker.master)
 			{
-				if(V_Moves(invoker.master)) V_Moves(invoker.master).PortalPos = (0, 0, 0);
-				return ResolveState("Null");
+				plr = V_Moves(invoker.master).owner;
+				if(V_Moves(invoker.master).teleport_restricted && plr && !plr.CheckSight(invoker, SF_IGNOREVISIBILITY | SF_IGNOREWATERBOUNDARY))
+				{
+					if(V_Moves(invoker.master)) V_Moves(invoker.master).PortalPos = (0, 0, 0);
+					return ResolveState("Null");
+				}
 			}
 			
+			if(invoker.master) V_Moves(invoker.master).PortalPos = (0, 0, 0);
 			return ResolveState(null);
 		}
 		TNT1 A 0 A_CheckCeiling("Crash");
@@ -863,7 +868,7 @@ class Telebeam_Dummy : Actor
 	
 	action void A_MakePortalCircle()
 	{
-		if(V_Moves(invoker.master) && V_Moves(invoker.master).PortalCircle)
+		if(invoker.master && V_Moves(invoker.master).PortalCircle)
 		{
 			if(V_Moves(invoker.master).teleport_restricted && !V_Moves(invoker.master).owner.CheckMove(self.pos.xy)) return;
 		

@@ -26,7 +26,8 @@ To download the Hyper-V mod click the download button below:
 ## Known Issues
 * Player may get stuck at some places when using the Grappling Hook. Wait for 5 sec to be released
 * Teleporting outside boundaries is possible and player may not be able to teleport back into the play area sometimes. In those cases use the Grappling Hook to try to return back or restart the level
-* In restricted mode Teleport does not work on slopes and strairs. In unrestricted Teleport mode player may often land inside walls or ourside play areas
+* In restricted mode Teleport does not work on slopes and stairs. In unrestricted Teleport mode player may often land inside walls or ourside play areas
+* Melee combo stun shake does not work in QuestZDoom by default. To enable screen shake increase earthquake shake intensity from Dislay Options
 
 ## Installation
 
