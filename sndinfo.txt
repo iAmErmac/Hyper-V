@@ -4,3 +4,24 @@ HookWall	"sounds/HookWall.ogg"
 HookMeat	"sounds/HookMeat.ogg"
 HookFailed	"sounds/HookFailed.ogg"
 HookLaunch	"sounds/HookLaunch.ogg"
+
+//Sounds taken from Beautiful Doom mod
+
+$random vrfist/punch { vrfist/punch1 vrfist/punch2 vrfist/punch3 }
+vrfist/punch1	FISTPUN1
+vrfist/punch2	FISTPUN2
+vrfist/punch3	FISTPUN3
+
+$random vrfist/strong { vrfist/strong1 vrfist/strong2 vrfist/strong3 }
+vrfist/strong1	FISTSTR1
+vrfist/strong2	FISTSTR2
+vrfist/strong3	FISTSTR3
+
+$random vrfist/rip { vrfist/rip1 vrfist/rip2 }
+vrfist/rip1	DSRIP1
+vrfist/rip2	DSRIP2
+
+$random vrfist/beat { hbeat1 hbeat2 hbeat3 }
+hbeat1	hbeat1
+hbeat2	hbeat2
+hbeat3	hbeat3

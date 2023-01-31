@@ -12,17 +12,25 @@ OptionMenu "VMM_Settings" {
 	Slider "Sprint Speed", 							"vmm_speed_mult", "0.5", "3.0", "0.5"
 	StaticText " "
 	StaticText "VR Melee", "Gold"
-	Option "Enable VR Melee", 						"vmm_melee", "OnOff"
-	StaticText "With VR Melee turned on you can swing any weapon to perform basic melee hits", "DarkGrey"
+	Option "VR Melee", 								"vmm_melee", "OnOff"
 	Slider "Melee Attack Range", 					"vmm_melee_range", 0, 3, 1, 0, vmm_melee
 	Option "Melee Attack Multiplier", 				"vmm_melee_mult", "VRMeleeDamage", vmm_melee
 	StaticText " "
+	Option "VR Melee Combo", 						"vmm_melee_combo", "OnOff", vmm_melee
+	Slider "Minimum Combo Hits", 					"vmm_melee_combohit", 2, 10, 1, 0, vmm_melee_combo
+	StaticText "Minimum melee hits on target to count as combo", "DarkGrey"
+	StaticText "Target will be knocked back after a combo hit", "DarkGrey"
+	Slider "Combo Knock Back Strength", 			"vmm_melee_knockback", "0.5", "4.0", "0.5", "1", vmm_melee_combo
+	Slider "Maximum Knock Back Mass", 				"vmm_melee_kb_mass", "100", "3000", "100", "0", vmm_melee_combo
+	StaticText "Maximum mass to knock back with combo. Heavier monsters can't be pushed back", "DarkGrey"
+	Option "Combo Critical", 						"vmm_melee_combocrit", "MeleeComboChance", vmm_melee_combo
+	Option "Combo Stun", 							"vmm_melee_stun", "MeleeComboChance", vmm_melee_combocrit
+	StaticText "Target can be stunned for 3-5 sec only with a critical hit", "DarkGrey"
+	StaticText " "
 	StaticText "Health Regenration", "Gold"
-	Option "Auto Regenrate Health", 				"vmm_health_regen", "OnOff"
-	StaticText " "
-	Option "Critical Health Regeneration Only", 	"vmm_critical_heal", "OnOff", vmm_health_regen
-	StaticText "With this option enabled health will be regenrated up to 30 points only", "DarkGrey"
-	StaticText " "
+	Option "Auto Restore Health", 					"vmm_health_regen", "OnOff"
+	Option "Critical Health restore Only", 			"vmm_critical_heal", "OnOff", vmm_health_regen
+	StaticText "With this option Health will be restored up to 30 points only", "DarkGrey"
 	Slider "Regenration Interval (In Sec)", 		"vmm_regen_time", "0.5", "10.0", "0.5", "1"
 	StaticText " "
 	StaticText "Forward Dash", "Gold"
@@ -32,8 +40,8 @@ OptionMenu "VMM_Settings" {
 	Slider "Dash Cooldown (In Sec)", 					"vmm_dash_cooldown", "0", "5.0", "0.5"
 	StaticText " "
 	StaticText "Double Jumping", "Gold"
-	StaticText "Jump higher when pressing jump button twice", "DarkGrey"
 	Option "Double Jump", 							"vmm_double_jump", "OnOff"
+	StaticText "Jump higher when pressing jump button twice", "DarkGrey"
 	StaticText " "
 	StaticText "Ledge Climbing", "Gold"
 	StaticText "Hold jump near a ledge to start climbing", "DarkGrey"
@@ -41,13 +49,14 @@ OptionMenu "VMM_Settings" {
 	StaticText " "
 	StaticText "Teleporting", "Gold"
 	Control "Teleport Move", 						"tpmv"
-	StaticText "Press once to activate teleporter beam. Press again to teleport", "DarkGrey"
-	StaticText "Press Jump key to deactivate teleporter beam", "DarkGrey"
+	StaticText "Hold to activate teleporter beam and release to teleport", "DarkGrey"
+	Option "Restricted Mode", 						"vmm_tp_restrict", "OnOff"
+	StaticText "In restricted mode you can't use teleport on slopes and stairs", "DarkGrey"
 	StaticText " "
 	StaticText "Grappling & Meat Hook", "Gold"
 	Control "Throw Hook", 							"netevent \"vmm_throwhook\""
 	StaticText "Hit a wall or ceiling to use as Grappling Hook", "DarkGrey"
-	StaticText "Hit a monster to use as Meat Hook", "DarkGrey"
+	StaticText "Hit a monster to pull in as Meat Hook", "DarkGrey"
 	Slider "Hook Cooldown (In Sec)", 				"vmm_hook_cooldown", "0", "5.0", "0.5"
 }
 
@@ -56,5 +65,21 @@ OptionValue VRMeleeDamage {
     1, "x1 Punch Damage"
     2, "x2 Punch Damage"
     3, "x3 Punch Damage"
+
+}
+
+OptionValue MeleeComboChance {
+
+    0, "Disabled"
+    1, "10% Chance"
+    2, "20% Chance"
+    3, "30% Chance"
+    4, "40% Chance"
+    5, "50% Chance"
+    6, "60% Chance"
+    7, "70% Chance"
+    8, "80% Chance"
+    9, "90% Chance"
+    10, "100% Chance"
 
 }
