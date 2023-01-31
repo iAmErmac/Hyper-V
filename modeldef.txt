@@ -39,3 +39,59 @@ Model PortalIndicator
 
 	FrameIndex PRTL A 0 0
 }
+
+Model Offhand_Fist
+{
+	Path "models/fist"
+	Model 0 "fist.md3"
+	Skin 0 "fist.png"
+	
+	INTERPOLATEDOUBLEDFRAMES
+	
+	Scale -1.0 1.0 1.0
+	Offset 0.0 0.0 0.0
+	 
+	FrameIndex PUNG A 0 0
+	FrameIndex PUNG B 0 1
+	FrameIndex PUNG C 0 2
+	FrameIndex PUNG D 0 10
+}
+
+Model Offhand_Fist
+{
+	Path "models/fist"
+	Model 0 "voxelfist.md3"
+	Skin 0 "voxelfist.png"
+	
+	INTERPOLATEDOUBLEDFRAMES
+	
+	Scale -1.0 1.0 1.0
+	Offset 0.0 0.0 0.0
+	 
+	FrameIndex FIST A 0 16
+	FrameIndex FIST B 0 12
+	Offset 0.0 -21.0 0.0
+	FrameIndex FIST C 0 8
+	Offset 0.0 -42.0 0.0
+	FrameIndex FIST D 0 1
+}
+
+Model Offhand_Fist
+{
+	Path "models/fist"
+	Model 0 "doomknuckles.md3"
+	Skin 0 "doomknuckles.png"
+	
+	INTERPOLATEDOUBLEDFRAMES
+	
+	Scale 1.0 -1.0 1.0
+	Offset 0.0 -30.0 -20.0
+	 
+	FrameIndex FST2 A 0 0
+	Offset 0.0 -40.0 -20.0
+	FrameIndex FST2 B 0 0
+	Offset 0.0 -53.0 -20.0
+	FrameIndex FST2 C 0 0
+	Offset 0.0 -65.0 -20.0
+	FrameIndex FST2 D 0 0
+}

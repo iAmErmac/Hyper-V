@@ -31,7 +31,17 @@ class vmm_Settings
   bool vrMeleeEnabled()   				{ return vrMeleeCvar.getBool();   				}
   double vrMeleeRange()   				{ return vrMeleeRangeCvar.getDouble();   		}
   int vrMeleeMult()   					{ return vrMeleeMultCvar.getInt();   			}
+  bool vrMeleeCombo()   				{ return vrMeleeComboCvar.getBool();   			}
+  int vrMeleeComboHit()   				{ return vrMeleeComboHitCvar.getInt();   		}
+  int vrMeleeComboCrit()   				{ return vrMeleeComboCritCvar.getInt();   		}
+  double vrMeleeKnockback()   			{ return vrMeleeKnockbackCvar.getDouble();   	}
+  int vrMeleeKnockbackMass()   			{ return vrMeleeKnockbackMassCvar.getInt();   	}
+  int vrMeleeComboStun()   				{ return vrMeleeComboStunCvar.getInt();   		}
   double ghookCooldown()   				{ return ghookCooldownCvar.getDouble();   		}
+  int hookHand()   						{ return hookHandCvar.getInt();   				}
+  int teleportHand()   					{ return teleportHandCvar.getInt();   			}
+  bool offhandFistEnabled()   			{ return offhandFistCvar.getBool();   			}
+  int offhandFistModel()   				{ return offhandFistModelCvar.getInt();   		}
 
   static
   vmm_Settings of()
@@ -52,7 +62,17 @@ class vmm_Settings
     result.vrMeleeCvar   				= vmm_Cvar.of("vmm_melee");
     result.vrMeleeRangeCvar   			= vmm_Cvar.of("vmm_melee_range");
     result.vrMeleeMultCvar   			= vmm_Cvar.of("vmm_melee_mult");
+    result.vrMeleeComboCvar   			= vmm_Cvar.of("vmm_melee_combo");
+    result.vrMeleeComboHitCvar   		= vmm_Cvar.of("vmm_melee_combohit");
+    result.vrMeleeComboCritCvar   		= vmm_Cvar.of("vmm_melee_combocrit");
+    result.vrMeleeKnockbackCvar   		= vmm_Cvar.of("vmm_melee_knockback");
+    result.vrMeleeKnockbackMassCvar   	= vmm_Cvar.of("vmm_melee_kb_mass");
+    result.vrMeleeComboStunCvar   		= vmm_Cvar.of("vmm_melee_stun");
     result.ghookCooldownCvar   			= vmm_Cvar.of("vmm_hook_cooldown");
+    result.hookHandCvar   				= vmm_Cvar.of("vmm_hook_hand");
+    result.teleportHandCvar   			= vmm_Cvar.of("vmm_teleport_hand");
+    result.offhandFistCvar   			= vmm_Cvar.of("vmm_offhand_fist");
+    result.offhandFistModelCvar   		= vmm_Cvar.of("vmm_offhand_model");
 
     return result;
   }
@@ -71,7 +91,17 @@ class vmm_Settings
   private vmm_Cvar vrMeleeCvar;
   private vmm_Cvar vrMeleeRangeCvar;
   private vmm_Cvar vrMeleeMultCvar;
+  private vmm_Cvar vrMeleeComboCvar;
+  private vmm_Cvar vrMeleeComboHitCvar;
+  private vmm_Cvar vrMeleeComboCritCvar;
+  private vmm_Cvar vrMeleeKnockbackCvar;
+  private vmm_Cvar vrMeleeKnockbackMassCvar;
+  private vmm_Cvar vrMeleeComboStunCvar;
   private vmm_Cvar ghookCooldownCvar;
+  private vmm_Cvar hookHandCvar;
+  private vmm_Cvar teleportHandCvar;
+  private vmm_Cvar offhandFistCvar;
+  private vmm_Cvar offhandFistModelCvar;
 
 } // class vmm_Settings
 

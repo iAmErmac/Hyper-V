@@ -1,0 +1,126 @@
+
+/*
+*
+* Universal off-hand fist script written by Ermac
+* https://github.com/iAmErmac
+*
+*
+* You may use this in your project. Just leave this comment
+* at the top of this script and give credit please
+*
+*/
+
+class OffhandFistHandler : EventHandler
+{
+	//Initialize default values
+	private void InitEvent(PlayerInfo player)
+	{
+		_settings = vmm_Settings.of();
+		player.mo.setinventory("Offhand_Fist", 1, false); //Give player off-hand fist weapon
+		_isInitialized = true;
+	}
+	
+	//Update model based on cvar change
+	private void UpdateFistModel(PlayerInfo player)
+	{
+		if(!_settings.offhandFistEnabled()) return;
+		
+		let player_offhand_fist = player.mo.findinventory("Offhand_Fist");
+		if(player_offhand_fist) Offhand_Fist(player_offhand_fist).fist_model = _settings.offhandFistModel();
+	}
+	
+	override void WorldTick()
+	{
+		if (_isTitlemap) { return; } //we dont need to initiate the mod if it's a titlemap
+		
+		PlayerInfo player = players[consolePlayer];
+		if (player == null) { return; }
+		
+		if (!_isInitialized) { initEvent(player); }
+		
+		UpdateFistModel(player);
+	}
+	
+	override void OnRegister()
+	{
+		_isInitialized = false;
+	}
+
+	override void WorldLoaded(WorldEvent event)
+	{
+		_isTitlemap = CheckTitlemap();
+	}
+
+	private static bool CheckTitlemap()
+	{
+		bool isTitlemap = (level.mapname == "TITLEMAP");
+		return isTitlemap;
+	}
+	
+	private bool _isTitlemap;
+	private bool _isInitialized;
+	private vmm_Settings _settings;
+}
+
+class Offhand_Fist : Weapon
+{
+	override void tick()
+	{
+		if(!owner || owner.health <= 0)
+		{
+			self.destroy();
+			return;
+		}
+		
+		//Equip the fist only when there is no weapon at offhand
+		if(owner.player.OffhandWeapon == null) owner.player.PendingWeapon = self;
+	}
+	
+	Default
+	{
+	Weapon.SelectionOrder 9898;
+	Obituary "$OB_MPFIST";
+	Tag "$TAG_FIST";
+	+WEAPON.WIMPY_WEAPON;
+	+WEAPON.MELEEWEAPON;
+	+WEAPON.OFFHANDWEAPON;
+	+WEAPON.NOHANDSWITCH;
+	+INVENTORY.UNDROPPABLE;
+	+INVENTORY.UNTOSSABLE;
+	+INVENTORY.UNCLEARABLE;
+	}
+	States
+    {
+	Ready:
+		PUNG A 1
+		{
+			//Select fist model based on cvar
+			if(invoker.fist_model == 1) return ResolveState("VoxelFist");
+			if(invoker.fist_model == 2) return ResolveState("VoxelFist2");
+			A_WeaponReady();
+			return ResolveState(null);
+		}
+		Loop;
+	Deselect:
+		#### A 1 A_Lower;
+		Loop;
+	Select:
+		#### A 1 A_Raise;
+		Loop;
+	Fire:
+		#### B 4;
+		#### C 4 A_Punch;
+		#### D 5;
+		#### C 4;
+		#### B 5 A_ReFire;
+		Goto Ready;
+	VoxelFist:
+		FIST A 1 A_WeaponReady;
+		Goto Ready;
+	VoxelFist2:
+		FST2 A 1 A_WeaponReady;
+		Goto Ready;
+	}
+	
+	int fist_model; //set by cvar
+}
