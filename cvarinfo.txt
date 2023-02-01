@@ -9,7 +9,7 @@ user bool 	vmm_ledge_climb 	= false;
 user bool 	vmm_health_regen 	= false;
 user bool 	vmm_critical_heal 	= true;
 user float 	vmm_regen_time 		= 5.0;
-user bool	vmm_melee			= true;
+user bool	vmm_melee 			= true;
 user float	vmm_melee_range		= 0;
 user int	vmm_melee_mult		= 1;
 user bool	vmm_melee_combo		= true;
@@ -24,3 +24,6 @@ user bool 	vmm_tp_restrict 	= true;
 user int 	vmm_teleport_hand 	= 0;
 user bool 	vmm_offhand_fist 	= false;
 user int 	vmm_offhand_model 	= 0;
+
+// interface for other mods
+user bool 	hyperv_loaded 		= true;

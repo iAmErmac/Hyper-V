@@ -20,7 +20,7 @@ OptionMenu "VMM_Settings" {
 	Slider "Minimum Combo Hits", 					"vmm_melee_combohit", 2, 10, 1, 0, vmm_melee_combo
 	StaticText "Minimum melee hits on target to count as combo", "DarkGrey"
 	StaticText "Target will be knocked back after a combo hit", "DarkGrey"
-	Slider "Combo Knock Back Strength", 			"vmm_melee_knockback", "0.5", "4.0", "0.5", "1", vmm_melee_combo
+	Slider "Combo Knock Back Strength", 			"vmm_melee_knockback", "0", "4.0", "0.5", "1", vmm_melee_combo
 	Slider "Maximum Knock Back Mass", 				"vmm_melee_kb_mass", "100", "3000", "100", "0", vmm_melee_combo
 	StaticText "Maximum mass to knock back with combo. Heavier monsters can't be pushed back", "DarkGrey"
 	Option "Combo Critical Chance", 				"vmm_melee_combocrit", "MeleeComboChance", vmm_melee_combo
@@ -39,7 +39,7 @@ OptionMenu "VMM_Settings" {
 	Control "Dash Move", 							"netevent \"vmm_dash\""
 	Option "Double Dash", 							"vmm_double_dash", "OnOff"
 	Slider "Dash Distance", 						"vmm_dash_mult", "0.5", "3.0", "0.5"
-	Slider "Dash Cooldown (In Sec)", 					"vmm_dash_cooldown", "0", "5.0", "0.5"
+	Slider "Dash Cooldown (In Sec)", 				"vmm_dash_cooldown", "0", "5.0", "0.5"
 	StaticText " "
 	StaticText "Double Jumping", "Gold"
 	StaticText "Jump higher when pressing jump button twice", "DarkGrey"

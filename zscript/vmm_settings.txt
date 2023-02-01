@@ -43,6 +43,8 @@ class vmm_Settings
   bool offhandFistEnabled()   			{ return offhandFistCvar.getBool();   			}
   int offhandFistModel()   				{ return offhandFistModelCvar.getInt();   		}
   bool teleportRestricted()   			{ return teleportRestrictCvar.getBool();   		}
+  
+  bool hyperVMeleeDisabled() 			{ return hyperVMeleeDisabledCvar.isDefined() && hyperVMeleeDisabledCvar.getBool(); }
 
   static
   vmm_Settings of()
@@ -76,6 +78,8 @@ class vmm_Settings
     result.offhandFistModelCvar   		= vmm_Cvar.of("vmm_offhand_model");
     result.teleportRestrictCvar   		= vmm_Cvar.of("vmm_tp_restrict");
 
+    result.hyperVMeleeDisabledCvar 		= vmm_Cvar.of("vmm_melee_disable");
+
     return result;
   }
 
@@ -105,6 +109,9 @@ class vmm_Settings
   private vmm_Cvar offhandFistCvar;
   private vmm_Cvar offhandFistModelCvar;
   private vmm_Cvar teleportRestrictCvar;
+  
+  //not settings, but public api
+  private vmm_Cvar hyperVMeleeDisabledCvar;
 
 } // class vmm_Settings
 

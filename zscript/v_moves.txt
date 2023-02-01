@@ -37,7 +37,7 @@ class VMovesHandler : EventHandler
 		UpdateVMoves(hyperv);
 		
 		//Reset some values to defaults
-		V_Moves(hyperv).cooldown_in_ticks = 0;
+		V_Moves(hyperv).dash_cooldown = 0;
 		V_Moves(hyperv).dash_buttons_press = 0;
 		V_Moves(hyperv).jump_buttons_press = 0;
 		V_Moves(hyperv).MaxLedgeHeight = 48;
@@ -68,6 +68,7 @@ class VMovesHandler : EventHandler
 		V_Moves(hyperv).double_jumping 		= _settings.doubleJumpEnabled();
 		V_Moves(hyperv).ledge_climbing 		= _settings.ledgeClimbEnabled();
 		V_Moves(hyperv).vr_melee 			= _settings.vrMeleeEnabled();
+		V_Moves(hyperv).vr_melee_disabled	= _settings.hyperVMeleeDisabled(); //this one loaded from external cvar
 		V_Moves(hyperv).vr_melee_range 		= _settings.vrMeleeRange();
 		V_Moves(hyperv).vr_melee_mult 		= _settings.vrMeleeMult();
 		V_Moves(hyperv).vr_melee_combo 		= _settings.vrMeleeCombo();
@@ -85,6 +86,11 @@ class VMovesHandler : EventHandler
 	override void OnRegister()
 	{
 		_isInitialized = false;
+	}
+
+	override void WorldLoaded(WorldEvent event)
+	{
+		_isTitlemap = CheckTitlemap();
 	}
 	
 	//Action response to keybinds
@@ -240,7 +246,7 @@ class V_Moves : CustomInventory
 	//////////////////////////////////////
 	
 		//Actual processing of dash moves
-		if(forward_thrust == true && cooldown_in_ticks <= 0)
+		if(forward_thrust == true && dash_cooldown <= 0)
 		{
 			if(dash_buttons_press <= max_dash_buttons_press)
 			{
@@ -258,18 +264,18 @@ class V_Moves : CustomInventory
 			if(dash_buttons_press >= max_dash_buttons_press)
 			{
 				dash_buttons_press = 0;
-				cooldown_in_ticks = dash_move_cooldown;
+				dash_cooldown = dash_move_cooldown;
 			}
 			else
 			{
-				cooldown_in_ticks = 2;
+				dash_cooldown = 2;
 			}
 		}
 		
-		if(cooldown_in_ticks > 0)
-		{cooldown_in_ticks--;}
+		if(dash_cooldown > 0)
+		{dash_cooldown--;}
 		
-		if(cooldown_in_ticks <= randompick(6, 7, 8) && owner.bspectral == true)
+		if(dash_cooldown <= randompick(6, 7, 8) && owner.bspectral == true)
 		{owner.bspectral = false;}
 		
 	//////////////////////////////////////
@@ -478,7 +484,7 @@ class V_Moves : CustomInventory
 	
 	void Perform_VR_Melee()
 	{
-		if(!vr_melee) return;
+		if(!vr_melee || vr_melee_disabled) return;
 		
 		Double b_angle = owner.angle;
 		double pitch = owner.AimTarget() ? owner.BulletSlope(null, ALF_PORTALRESTRICT) : owner.pitch;
@@ -495,9 +501,9 @@ class V_Moves : CustomInventory
 		if(!melee_delay)
 		{
 			//scan for melee target in a cone shaped area
-			owner.LineAttack(b_angle, attack_range, pitch, 0, "none", "DummyPuff", LAF_NOINTERACT | LAF_NOIMPACTDECAL | LAF_NORANDOMPUFFZ, t);
-			owner.LineAttack(b_angle - 30.0, attack_range, pitch, 0, "none", "DummyPuff", LAF_NOINTERACT | LAF_NOIMPACTDECAL | LAF_NORANDOMPUFFZ, t2);
-			owner.LineAttack(b_angle + 30.0, attack_range, pitch, 0, "none", "DummyPuff", LAF_NOINTERACT | LAF_NOIMPACTDECAL | LAF_NORANDOMPUFFZ, t3);
+			owner.LineAttack(b_angle, attack_range, pitch, 0, "none", "vmDummyPuff", LAF_NOINTERACT | LAF_NOIMPACTDECAL | LAF_NORANDOMPUFFZ, t);
+			owner.LineAttack(b_angle - 30.0, attack_range, pitch, 0, "none", "vmDummyPuff", LAF_NOINTERACT | LAF_NOIMPACTDECAL | LAF_NORANDOMPUFFZ, t2);
+			owner.LineAttack(b_angle + 30.0, attack_range, pitch, 0, "none", "vmDummyPuff", LAF_NOINTERACT | LAF_NOIMPACTDECAL | LAF_NORANDOMPUFFZ, t3);
 			if(t.linetarget)
 			{
 				m_damage = CheckMeleeCombo(t.linetarget) ? m_damage * frandom(1.5, 3.0) : m_damage;
@@ -529,9 +535,9 @@ class V_Moves : CustomInventory
 		if(!offhand_melee_delay)
 		{
 			//scan for melee target in a cone shaped area
-			owner.LineAttack(b_angle, attack_range, pitch, 0, "none", "DummyPuff", LAF_NOINTERACT | LAF_NOIMPACTDECAL | LAF_NORANDOMPUFFZ | LAF_ISOFFHAND, t4);
-			owner.LineAttack(b_angle - 30.0, attack_range, pitch, 0, "none", "DummyPuff", LAF_NOINTERACT | LAF_NOIMPACTDECAL | LAF_NORANDOMPUFFZ | LAF_ISOFFHAND, t5);
-			owner.LineAttack(b_angle + 30.0, attack_range, pitch, 0, "none", "DummyPuff", LAF_NOINTERACT | LAF_NOIMPACTDECAL | LAF_NORANDOMPUFFZ | LAF_ISOFFHAND, t6);
+			owner.LineAttack(b_angle, attack_range, pitch, 0, "none", "vmDummyPuff", LAF_NOINTERACT | LAF_NOIMPACTDECAL | LAF_NORANDOMPUFFZ | LAF_ISOFFHAND, t4);
+			owner.LineAttack(b_angle - 30.0, attack_range, pitch, 0, "none", "vmDummyPuff", LAF_NOINTERACT | LAF_NOIMPACTDECAL | LAF_NORANDOMPUFFZ | LAF_ISOFFHAND, t5);
+			owner.LineAttack(b_angle + 30.0, attack_range, pitch, 0, "none", "vmDummyPuff", LAF_NOINTERACT | LAF_NOIMPACTDECAL | LAF_NORANDOMPUFFZ | LAF_ISOFFHAND, t6);
 			if(t4.linetarget)
 			{
 				m_damage = CheckMeleeCombo(t4.linetarget) ? m_damage * frandom(1.5, 3.0) : m_damage;
@@ -575,20 +581,20 @@ class V_Moves : CustomInventory
 			target.TakeInventory("vrMeleeComboMarker", 10);
 			
 			//Knock back if possible
-			if(target.mass <=  vr_melee_kb_mass) target.A_Recoil(10 * vr_melee_knockback);
+			if(vr_melee_knockback && target.mass <=  vr_melee_kb_mass) target.A_Recoil(10 * vr_melee_knockback);
 			
 			//If it's a critical hit
 			if(random(1, 10) <= vr_melee_combocrit)
 			{
 				is_critical_hit = true;
-				target.A_PlaySound("vrfist/strong", CHAN_BODY);
+				target.A_PlaySound("vrfist/strong", 6);
 				
 				//If has a chance to stun
 				if(random(1, 10) <= vr_meleecombostun)
 				{
 					target.GiveInventory("vrMeleeComboStunner", 1);
 					target.A_Quake(random(1,2), 22, 0, 64, "");
-					target.A_PlaySound("vrfist/rip", 6);
+					target.A_PlaySound("vrfist/rip", 5);
 					target.A_PlaySound("vrfist/beat", 7);
 				}
 			}
@@ -616,7 +622,7 @@ class V_Moves : CustomInventory
 	int max_dash_buttons_press;
 	int dash_move_cooldown; //set by cvar
 	double dash_multiplier; //set by cvar
-	int cooldown_in_ticks;
+	int dash_cooldown;
 	
 	//Double Jump
 	bool double_jumping; //set by cvar
@@ -648,6 +654,7 @@ class V_Moves : CustomInventory
 	
 	//Positional Melee
 	bool vr_melee; //set by cvar
+	bool vr_melee_disabled; //set by external cvar
 	double vr_melee_range; //set by cvar
 	int vr_melee_mult; //set by cvar
 	int melee_delay;
@@ -965,7 +972,7 @@ class PortalIndicatorLight : PortalIndicator
 }
 
 //Dummy puff used by vr melee
-Class DummyPuff : BulletPuff
+Class vmDummyPuff : BulletPuff
 {
 	Default
 	{
