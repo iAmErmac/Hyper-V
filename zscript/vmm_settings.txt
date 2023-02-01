@@ -39,6 +39,8 @@ class vmm_Settings
   int vrMeleeComboStun()   				{ return vrMeleeComboStunCvar.getInt();   		}
   double ghookCooldown()   				{ return ghookCooldownCvar.getDouble();   		}
   bool teleportRestricted()   			{ return teleportRestrictCvar.getBool();   		}
+  
+  bool hyperVMeleeDisabled() 			{ return hyperVMeleeDisabledCvar.isDefined() && hyperVMeleeDisabledCvar.getBool(); }
 
   static
   vmm_Settings of()
@@ -68,6 +70,8 @@ class vmm_Settings
     result.ghookCooldownCvar   			= vmm_Cvar.of("vmm_hook_cooldown");
     result.teleportRestrictCvar   		= vmm_Cvar.of("vmm_tp_restrict");
 
+    result.hyperVMeleeDisabledCvar 		= vmm_Cvar.of("vmm_melee_disable");
+
     return result;
   }
 
@@ -93,6 +97,9 @@ class vmm_Settings
   private vmm_Cvar vrMeleeComboStunCvar;
   private vmm_Cvar ghookCooldownCvar;
   private vmm_Cvar teleportRestrictCvar;
+  
+  //not settings, but public api
+  private vmm_Cvar hyperVMeleeDisabledCvar;
 
 } // class vmm_Settings
 

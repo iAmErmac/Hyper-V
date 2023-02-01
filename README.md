@@ -23,6 +23,9 @@ To download the Hyper-V mod click the download button below:
 * Optional Auto Heals
 * Can be used in regular, VR or dual-wield VR builds of gzdoom/lzdoom/questzdoom
 
+## API
+* now features an api to disable Positional Melee from other mods. Simply add a cvar named vmm_melee_disable in your mod and set it "true" in you script to disable Positional Melee from this mod
+
 ## Known Issues
 * Player may get stuck at some places when using the Grappling Hook. Wait for 5 sec to be released
 * Teleporting outside boundaries is possible and player may not be able to teleport back into the play area sometimes. In those cases use the Grappling Hook to try to return back or restart the level
