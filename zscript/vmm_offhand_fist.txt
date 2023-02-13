@@ -16,17 +16,26 @@ class OffhandFistHandler : EventHandler
 	private void InitEvent(PlayerInfo player)
 	{
 		_settings = vmm_Settings.of();
-		player.mo.setinventory("Offhand_Fist", 1, false); //Give player off-hand fist weapon
 		_isInitialized = true;
 	}
 	
 	//Update model based on cvar change
-	private void UpdateFistModel(PlayerInfo player)
+	private void UpdateFist(PlayerInfo player)
 	{
-		if(!_settings.offhandFistEnabled()) return;
+		if(!_settings.offhandFistEnabled())
+		{
+			player.mo.takeInventory("Offhand_Fist", 1);
+			return;
+		}
+		
+		if(!player.mo.CountInv("Offhand_Fist")) player.mo.setinventory("Offhand_Fist", 1, false); //Give player off-hand fist weapon
 		
 		let player_offhand_fist = player.mo.findinventory("Offhand_Fist");
-		if(player_offhand_fist) Offhand_Fist(player_offhand_fist).fist_model = _settings.offhandFistModel();
+		if(player_offhand_fist)
+		{
+			Offhand_Fist(player_offhand_fist).fist_model = _settings.offhandFistModel();
+			Offhand_Fist(player_offhand_fist).punch_activate = _settings.punchActivate();
+		}
 	}
 	
 	override void WorldTick()
@@ -38,7 +47,7 @@ class OffhandFistHandler : EventHandler
 		
 		if (!_isInitialized) { initEvent(player); }
 		
-		UpdateFistModel(player);
+		UpdateFist(player);
 	}
 	
 	override void OnRegister()
@@ -74,6 +83,12 @@ class Offhand_Fist : Weapon
 		
 		//Equip the fist only when there is no weapon at offhand
 		if(owner.player.OffhandWeapon == null) owner.player.PendingWeapon = self;
+		
+		hyperv = owner.player.mo.findinventory("V_Moves");
+		if(hyperv && V_Moves(hyperv).vr_touch_pose)
+			touch_pose = true;
+		else
+			touch_pose = false;
 	}
 	
 	Default
@@ -85,22 +100,28 @@ class Offhand_Fist : Weapon
 	+WEAPON.MELEEWEAPON;
 	+WEAPON.OFFHANDWEAPON;
 	+WEAPON.NOHANDSWITCH;
+	+WEAPON.CHEATNOTWEAPON;
 	+INVENTORY.UNDROPPABLE;
 	+INVENTORY.UNTOSSABLE;
 	+INVENTORY.UNCLEARABLE;
 	}
+	
 	States
     {
 	Ready:
-		PUNG A 1
+		TNT1 A 0
 		{
 			//Select fist model based on cvar
 			if(invoker.fist_model == 1) return ResolveState("VoxelFist");
 			if(invoker.fist_model == 2) return ResolveState("VoxelFist2");
-			A_WeaponReady();
+			if((invoker.owner.player.cmd.buttons & BT_USE) || invoker.touch_pose) return ResolveState("ReadyGrab");
 			return ResolveState(null);
 		}
+		PUNG A 1 A_WeaponReady;
 		Loop;
+	ReadyGrab:
+		PUNG E 1 A_WeaponReady;
+		Goto Ready;
 	Deselect:
 		#### A 1 A_Lower;
 		Loop;
@@ -109,7 +130,13 @@ class Offhand_Fist : Weapon
 		Loop;
 	Fire:
 		#### B 4;
-		#### C 4 A_Punch;
+		#### B 0 A_JumpIfInventory("PowerStrength", 1, "Berserked");
+	Normal:
+		#### C 4 A_CustomPunchLine(2 * random(1, 10), TRUE, 0, "BulletPuff");
+		Goto FireEnd;
+	Berserked:
+		#### C 4 A_CustomPunchLine(20 * random(1, 10), TRUE, 0, "BulletPuff");
+	FireEnd:
 		#### D 5;
 		#### C 4;
 		#### B 5 A_ReFire;
@@ -122,5 +149,30 @@ class Offhand_Fist : Weapon
 		Goto Ready;
 	}
 	
+	action void A_CustomPunchLine (int damage, bool norandom = false, int flags = CPF_USEAMMO, class<Actor> pufftype = "BulletPuff", double range = 0, double lifesteal = 0, int lifestealmax = 0, class<BasicArmorBonus> armorbonustype = "ArmorBonus", sound MeleeSound = 0, sound MissSound = "")
+	{
+		if (range == 0)
+			range = DEFMELEERANGE;
+		
+		if(invoker.punch_activate)
+		{
+			FLineTraceData l;
+			double z = player.mo.OffhandPos.z - FloorZ; //height * 0.5 - floorclip + player.mo.AttackZOffset*player.crouchFactor;
+			double angleP = player.mo.OffhandAngle + 90.0;
+			double pitchP = player.mo.OffhandPitch;
+			LineTrace(angleP, range, pitchP, TRF_BLOCKUSE, offsetz: z, data: l);
+			let lline = l.HitLine;
+			if (lline)
+			{
+				lline.Activate(self, l.LineSide, SPAC_Use);
+			}
+		}
+		
+		A_CustomPunch(damage, norandom, flags, pufftype, range, lifesteal, lifestealmax, armorbonustype, meleesound, misssound);
+	}
+	
 	int fist_model; //set by cvar
+	bool punch_activate; //set by cvar
+	private inventory hyperv;
+	private bool touch_pose;
 }

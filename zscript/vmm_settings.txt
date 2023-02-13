@@ -43,6 +43,11 @@ class vmm_Settings
   bool offhandFistEnabled()   			{ return offhandFistCvar.getBool();   			}
   int offhandFistModel()   				{ return offhandFistModelCvar.getInt();   		}
   bool teleportRestricted()   			{ return teleportRestrictCvar.getBool();   		}
+  bool touchActivate()   				{ return touchActivateCvar.getBool();   		}
+  double touchRange()   				{ return touchRangeCvar.getDouble();   			}
+  int touchMode()   					{ return touchModeCvar.getInt();   				}
+  double touchFrequency()   			{ return touchFrequencyCvar.getDouble();   		}
+  bool punchActivate()   				{ return punchActivateCvar.getBool();   		}
   
   bool hyperVMeleeDisabled() 			{ return hyperVMeleeDisabledCvar.isDefined() && hyperVMeleeDisabledCvar.getBool(); }
 
@@ -77,6 +82,11 @@ class vmm_Settings
     result.offhandFistCvar   			= vmm_Cvar.of("vmm_offhand_fist");
     result.offhandFistModelCvar   		= vmm_Cvar.of("vmm_offhand_model");
     result.teleportRestrictCvar   		= vmm_Cvar.of("vmm_tp_restrict");
+    result.touchActivateCvar   			= vmm_Cvar.of("vmm_touch_activate");
+    result.touchRangeCvar   			= vmm_Cvar.of("vmm_touch_range");
+    result.touchModeCvar   				= vmm_Cvar.of("vmm_touch_mode");
+    result.touchFrequencyCvar   		= vmm_Cvar.of("vmm_touch_frequency");
+    result.punchActivateCvar   			= vmm_Cvar.of("vmm_punch_activate");
 
     result.hyperVMeleeDisabledCvar 		= vmm_Cvar.of("vmm_melee_disable");
 
@@ -109,6 +119,11 @@ class vmm_Settings
   private vmm_Cvar offhandFistCvar;
   private vmm_Cvar offhandFistModelCvar;
   private vmm_Cvar teleportRestrictCvar;
+  private vmm_Cvar touchActivateCvar;
+  private vmm_Cvar touchRangeCvar;
+  private vmm_Cvar touchModeCvar;
+  private vmm_Cvar touchFrequencyCvar;
+  private vmm_Cvar punchActivateCvar;
   
   //not settings, but public api
   private vmm_Cvar hyperVMeleeDisabledCvar;

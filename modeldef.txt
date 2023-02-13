@@ -4,7 +4,7 @@ Model HookProjectile
 	Model 0 "grap4.md3"
 	Skin 0 "grap4.png"
 	Scale 10.0 10.0 10.0
-	
+
 	USEACTORPITCH
 	PITCHFROMMOMENTUM
 	USEACTORROLL
@@ -18,7 +18,7 @@ Model HookProjectile
 	Model 0 "grap4_2.md3"
 	Skin 0 "grap4.png"
 	Scale 10.0 10.0 10.0
-	
+
 	USEACTORPITCH
 	PITCHFROMMOMENTUM
 	USEACTORROLL
@@ -33,7 +33,7 @@ Model PortalIndicator
 	Skin 0 "Portal.png"
 	Scale 30.0 30.0 1.0
 	ZOffset 1
-	
+
 	ROTATING
 	Rotation-Speed 0.3
 
@@ -45,16 +45,17 @@ Model Offhand_Fist
 	Path "models/fist"
 	Model 0 "fist.md3"
 	Skin 0 "fist.png"
-	
+
 	INTERPOLATEDOUBLEDFRAMES
-	
+
 	Scale -1.0 1.0 1.0
 	Offset 0.0 0.0 0.0
-	 
+
 	FrameIndex PUNG A 0 0
 	FrameIndex PUNG B 0 1
 	FrameIndex PUNG C 0 2
 	FrameIndex PUNG D 0 10
+	FrameIndex PUNG E 0 48
 }
 
 Model Offhand_Fist
@@ -62,12 +63,12 @@ Model Offhand_Fist
 	Path "models/fist"
 	Model 0 "voxelfist.md3"
 	Skin 0 "voxelfist.png"
-	
+
 	INTERPOLATEDOUBLEDFRAMES
-	
+
 	Scale -1.0 1.0 1.0
 	Offset 0.0 0.0 0.0
-	 
+
 	FrameIndex FIST A 0 16
 	FrameIndex FIST B 0 12
 	Offset 0.0 -21.0 0.0
@@ -81,12 +82,12 @@ Model Offhand_Fist
 	Path "models/fist"
 	Model 0 "doomknuckles.md3"
 	Skin 0 "doomknuckles.png"
-	
+
 	INTERPOLATEDOUBLEDFRAMES
-	
+
 	Scale 1.0 -1.0 1.0
 	Offset 0.0 -30.0 -20.0
-	 
+
 	FrameIndex FST2 A 0 0
 	Offset 0.0 -40.0 -20.0
 	FrameIndex FST2 B 0 0

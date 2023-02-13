@@ -24,6 +24,11 @@ user bool 	vmm_tp_restrict 	= true;
 user int 	vmm_teleport_hand 	= 0;
 user bool 	vmm_offhand_fist 	= false;
 user int 	vmm_offhand_model 	= 0;
+user bool 	vmm_touch_activate 	= false;
+user float 	vmm_touch_range 	= 0;
+user int 	vmm_touch_mode 		= 0;
+user float 	vmm_touch_frequency = 1.0;
+user bool 	vmm_punch_activate 	= true;
 
 // interface for other mods
 user bool 	hyperv_loaded 		= true;

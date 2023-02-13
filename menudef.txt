@@ -30,7 +30,7 @@ OptionMenu "VMM_Settings" {
 	StaticText "Health Regenration", "Gold"
 	Option "Auto Restore Health", 					"vmm_health_regen", "OnOff"
 	StaticText " "
-	Option "Critical Health restore Only", 			"vmm_critical_heal", "OnOff", vmm_health_regen
+	Option "Critical Health Restore Only", 			"vmm_critical_heal", "OnOff", vmm_health_regen
 	StaticText "With this option Health will be restored up to 30 points only", "DarkGrey"
 	StaticText " "
 	Slider "Regenration Interval (In Sec)", 		"vmm_regen_time", "0.5", "10.0", "0.5", "1"
@@ -66,6 +66,14 @@ OptionMenu "VMM_Settings" {
 	StaticText "Off-hand Fist", "Gold"
 	Option "Off-hand Fist", 						"vmm_offhand_fist", "OnOff"
 	Option "Fist Model", 							"vmm_offhand_model", "OffhandFistModel"
+	StaticText " "
+	StaticText "Touch To Activate", "Gold"
+	Option "Touch To Activate", 					"vmm_touch_activate", "OnOff"
+	StaticText "Touching doors or switches with your hands will activate them", "DarkGrey"
+	Slider "Touch Range", 							"vmm_touch_range", 0, 2.0, 0.5, 1, vmm_touch_activate
+	Option "Activate By", 							"vmm_touch_mode", "TouchActivateMode", vmm_touch_activate
+	Slider "Touch Frequency (sec)", 				"vmm_touch_frequency", 0, 5, 0.5, 1, vmm_touch_activate
+	Option "Off-hand Punch To Activate", 			"vmm_punch_activate", "OnOff", vmm_offhand_fist
 }
 
 OptionValue VRMeleeDamage {
@@ -104,5 +112,13 @@ OptionValue OffhandFistModel {
     0, "3D Fist"
     1, "Voxel Fist"
     2, "Voxel Fist (Alt)"
+
+}
+
+OptionValue TouchActivateMode {
+
+    0, "Both Hands"
+    1, "Main hand Only"
+    2, "Off-hand Only"
 
 }
