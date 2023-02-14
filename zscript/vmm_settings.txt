@@ -39,6 +39,9 @@ class vmm_Settings
   int vrMeleeComboStun()   				{ return vrMeleeComboStunCvar.getInt();   		}
   double ghookCooldown()   				{ return ghookCooldownCvar.getDouble();   		}
   bool teleportRestricted()   			{ return teleportRestrictCvar.getBool();   		}
+  bool touchActivate()   				{ return touchActivateCvar.getBool();   		}
+  double touchRange()   				{ return touchRangeCvar.getDouble();   			}
+  double touchFrequency()   			{ return touchFrequencyCvar.getDouble();   		}
   
   bool hyperVMeleeDisabled() 			{ return hyperVMeleeDisabledCvar.isDefined() && hyperVMeleeDisabledCvar.getBool(); }
 
@@ -69,6 +72,9 @@ class vmm_Settings
     result.vrMeleeComboStunCvar   		= vmm_Cvar.of("vmm_melee_stun");
     result.ghookCooldownCvar   			= vmm_Cvar.of("vmm_hook_cooldown");
     result.teleportRestrictCvar   		= vmm_Cvar.of("vmm_tp_restrict");
+    result.touchActivateCvar   			= vmm_Cvar.of("vmm_touch_activate");
+    result.touchRangeCvar   			= vmm_Cvar.of("vmm_touch_range");
+    result.touchFrequencyCvar   		= vmm_Cvar.of("vmm_touch_frequency");
 
     result.hyperVMeleeDisabledCvar 		= vmm_Cvar.of("vmm_melee_disable");
 
@@ -97,6 +103,9 @@ class vmm_Settings
   private vmm_Cvar vrMeleeComboStunCvar;
   private vmm_Cvar ghookCooldownCvar;
   private vmm_Cvar teleportRestrictCvar;
+  private vmm_Cvar touchActivateCvar;
+  private vmm_Cvar touchRangeCvar;
+  private vmm_Cvar touchFrequencyCvar;
   
   //not settings, but public api
   private vmm_Cvar hyperVMeleeDisabledCvar;

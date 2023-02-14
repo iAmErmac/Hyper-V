@@ -4,7 +4,7 @@ Model HookProjectile
 	Model 0 "grap4.md3"
 	Skin 0 "grap4.png"
 	Scale 10.0 10.0 10.0
-	
+
 	USEACTORPITCH
 	PITCHFROMMOMENTUM
 	USEACTORROLL
@@ -18,7 +18,7 @@ Model HookProjectile
 	Model 0 "grap4_2.md3"
 	Skin 0 "grap4.png"
 	Scale 10.0 10.0 10.0
-	
+
 	USEACTORPITCH
 	PITCHFROMMOMENTUM
 	USEACTORROLL
@@ -33,7 +33,7 @@ Model PortalIndicator
 	Skin 0 "Portal.png"
 	Scale 30.0 30.0 1.0
 	ZOffset 1
-	
+
 	ROTATING
 	Rotation-Speed 0.3
 

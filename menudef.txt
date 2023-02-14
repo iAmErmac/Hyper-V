@@ -29,7 +29,8 @@ OptionMenu "VMM_Settings" {
 	StaticText " "
 	StaticText "Health Regenration", "Gold"
 	Option "Auto Restore Health", 					"vmm_health_regen", "OnOff"
-	Option "Critical Health restore Only", 			"vmm_critical_heal", "OnOff", vmm_health_regen
+	StaticText " "
+	Option "Critical Health Restore Only", 			"vmm_critical_heal", "OnOff", vmm_health_regen
 	StaticText "With this option Health will be restored up to 30 points only", "DarkGrey"
 	Slider "Regenration Interval (In Sec)", 		"vmm_regen_time", "0.5", "10.0", "0.5", "1"
 	StaticText " "
@@ -58,6 +59,12 @@ OptionMenu "VMM_Settings" {
 	StaticText "Hit a wall or ceiling to use as Grappling Hook", "DarkGrey"
 	StaticText "Hit a monster to pull in as Meat Hook", "DarkGrey"
 	Slider "Hook Cooldown (In Sec)", 				"vmm_hook_cooldown", "0", "5.0", "0.5"
+	StaticText " "
+	StaticText "Touch To Activate", "Gold"
+	Option "Touch To Activate", 					"vmm_touch_activate", "OnOff"
+	StaticText "Touching doors or switches with your hand will activate them", "DarkGrey"
+	Slider "Touch Range", 							"vmm_touch_range", 0, 2.0, 0.5, 1, vmm_touch_activate
+	Slider "Touch Frequency (sec)", 				"vmm_touch_frequency", 0, 5, 0.5, 1, vmm_touch_activate
 }
 
 OptionValue VRMeleeDamage {

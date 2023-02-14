@@ -20,6 +20,9 @@ user float	vmm_melee_kb_mass	= 600;
 user int	vmm_melee_stun		= 4;
 user float 	vmm_hook_cooldown 	= 1.0;
 user bool 	vmm_tp_restrict 	= true;
+user bool 	vmm_touch_activate 	= false;
+user float 	vmm_touch_range 	= 0.5;
+user float 	vmm_touch_frequency = 1.0;
 
 // interface for other mods
 user bool 	hyperv_loaded 		= true;

@@ -79,6 +79,9 @@ class VMovesHandler : EventHandler
 		V_Moves(hyperv).vr_meleecombostun 	= _settings.vrMeleeComboStun();
 		V_Moves(hyperv).hook_coldown		= _settings.ghookCooldown();
 		V_Moves(hyperv).teleport_restricted	= _settings.teleportRestricted();
+		V_Moves(hyperv).vr_touch_activate	= _settings.touchActivate();
+		V_Moves(hyperv).vr_touch_range		= _settings.touchRange();
+		V_Moves(hyperv).vr_touch_freq		= _settings.touchFrequency();
 	}
 	
 	override void OnRegister()
@@ -310,7 +313,8 @@ class V_Moves : CustomInventory
 		}
 		
 		ActivateTeleporter();
-		Perform_VR_Melee();
+		ActivateTouchLineUse();
+		PerformVRMelee();
 	}
 	
 	//////////////////////////////////////
@@ -471,10 +475,47 @@ class V_Moves : CustomInventory
 	}
 
 	//////////////////////////////////////
+	// Touch Door/Switch to activate 	//
+	//////////////////////////////////////
+	
+	void ActivateTouchLineUse()
+	{
+		if(!vr_touch_activate) return;
+		
+		//always use the tracker to calculate the main hand pos
+		Actor mainhand_tracker = owner.SpawnPlayerMissile("MainHandPosTracker");
+		if(mainhand_tracker) mainhand_tracker.master = self;
+		
+		if((vr_touch_delay + vr_touch_freq * 35) > 0)
+		{
+			vr_touch_delay--;
+			return;
+		}
+		
+		TryActivateLines();
+	}
+	
+	void TryActivateLines(Int hand = 0)
+	{
+		if(!vr_touch_activate) return;
+		
+		vector3 startPos = AttackPos;
+		startPos.y += owner.radius/2;
+		double angle = AttackAngle;
+		double pitch = -AttackPitch;
+		
+		Actor lineTracer = Actor.Spawn("vmlineTraceUseDummy", startPos);
+		lineTracer.master = owner.player.mo;
+		lineTracer.A_SetAngle(angle);
+		lineTracer.A_SetPitch(pitch);
+		vmlineTraceUseDummy(lineTracer).range = 0.25 + vr_touch_range;
+	}
+
+	//////////////////////////////////////
 	// Positional Melee					//
 	//////////////////////////////////////
 	
-	void Perform_VR_Melee()
+	void PerformVRMelee()
 	{
 		if(!vr_melee || vr_melee_disabled) return;
 		
@@ -608,6 +649,15 @@ class V_Moves : CustomInventory
 	Actor PortalCircle;
 	Vector3 PortalPos;
 	
+	//Touch activate mode
+	bool vr_touch_activate; //set by cvar
+	double vr_touch_range; //set by cvar
+	bool vr_touch_freq; //set by cvar
+	int vr_touch_delay;
+	vector3 AttackPos;
+	double AttackAngle;
+	double AttackPitch;
+	
 	//Positional Melee
 	bool vr_melee; //set by cvar
 	bool vr_melee_disabled; //set by external cvar
@@ -677,6 +727,97 @@ Class vrMeleeComboStunner : Inventory
 	
 	private bool is_initialized;
 	private int stun_duration;
+}
+
+	//////////////////////////////////////
+	// Touch Use Actor					//
+	//////////////////////////////////////
+
+Class vmlineTraceUseDummy : Actor
+{
+	Default
+	{
+	Mass        0;
+	Radius      1;
+	Height      2;
+
+	+NOBLOCKMAP;
+	+NOGRAVITY;
+	+DONTSPLASH;
+	+SKYEXPLODE;
+	+GHOST;
+	}
+
+	States
+	{
+	Spawn:
+		TNT1 A 1;
+		Stop;
+	}
+	
+	override void Tick()
+	{
+		FLineTraceData l;
+		double z = height * 0.5 - floorclip + pos.z;
+		LineTrace(angle, range * 64, pitch, TRF_BLOCKUSE, offsetz: z, data: l);
+		let lline = l.HitLine;
+		if (lline)
+		{
+			lline.Activate(master, l.LineSide, SPAC_Use);
+			V_Moves(master.findInventory("V_Moves")).vr_touch_delay = 22;
+		}
+		destroy();
+	}
+	
+	double range;
+}
+
+Class MainHandPosTracker : Actor
+{
+	override void BeginPlay()
+	{
+		t_pos = self.pos;
+	}
+
+	override void Tick()
+	{
+		Super.Tick();
+		
+		let dX = t_pos.x - self.pos.x;
+		let dY = t_pos.y - self.pos.y;
+		let dZ = t_pos.z - self.pos.z;
+		
+		t_pitch = (atan2(sqrt(dX * dX + dY * dY), dZ) * -1) + 90;
+		
+		V_Moves(master).AttackPos = t_pos;
+		V_Moves(master).AttackAngle = self.angle;
+		V_Moves(master).AttackPitch = t_pitch;
+	}
+
+	Default
+	{
+	Projectile;
+	+MISSILE;
+	+NOGRAVITY;
+	+NOBLOCKMAP;
+	+DONTSPLASH;
+	+THRUACTORS;
+	Radius 1;
+	Height 1;
+	Damage 0;
+	Speed 65;
+	RenderStyle "None";
+	}
+	
+	States
+	{
+	Spawn:
+		TNT1 A 1;
+		Stop;
+	}
+	
+	private vector3 t_pos;
+	private double t_pitch;
 }
 
 	//////////////////////////////////////
